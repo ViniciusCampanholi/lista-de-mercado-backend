@@ -44,9 +44,9 @@ public class ListaCompraController {
         return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(lista));
     }
 
-  @PostMapping("/adicionar/produto/{idProduto}/lista/{idLista}")
-    public ResponseEntity<ListaCompra> addProduto(@PathVariable Long idProduto, @PathVariable Long idLista){
-        return listaCompraService.adicionarNaLista(idProduto, idLista);
+  @PostMapping("/adicionar/produto/{idProduto}")
+    public ResponseEntity<ListaCompra> addProduto(@PathVariable Long idProduto, @RequestBody ListaCompra lista){
+        return listaCompraService.adicionarNaLista(idProduto, lista);
     }
 
     // @PutMapping("/atualizar")

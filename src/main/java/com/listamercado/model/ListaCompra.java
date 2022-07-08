@@ -1,15 +1,10 @@
 package com.listamercado.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,22 +18,32 @@ public class ListaCompra {
     @Column(name = "nome_lista", nullable = false)
     private String nomeLista;
 
-    @Column(name = "valorTotalLista")
-    private double valorTotalLista;
+    @Column(name = "nomeProduto")
+    private String nomeProduto;
 
-    @OneToMany(mappedBy = "listaCompra")
-    @JsonIgnoreProperties("listaCompra")
-    private List<ItemListaCompra> item;
+    @Column(name = "quantidade")
+    private int quantidade;
+    
+    @Column(name = "valorUnitario")
+    private double valorUnitario;
+    
+    @Column(name = "valorTotal")
+    private double valorTotal;
     
     public ListaCompra() {
     }
 
-    public ListaCompra(Long id, String nomeLista, double valorTotalLista, List<ItemListaCompra> item) {
+
+    public ListaCompra(Long id, String nomeLista, String nomeProduto, int quantidade, double valorUnitario,
+            double valorTotal) {
         this.id = id;
         this.nomeLista = nomeLista;
-        this.valorTotalLista = valorTotalLista;
-        this.item = item;
+        this.nomeProduto = nomeProduto;
+        this.quantidade = quantidade;
+        this.valorUnitario = valorUnitario;
+        this.valorTotal = valorTotal;
     }
+
 
     public Long getId() {
         return id;
@@ -56,20 +61,38 @@ public class ListaCompra {
         this.nomeLista = nomeLista;
     }
 
-    public double getValorTotalLista() {
-        return valorTotalLista;
+    public int getQuantidade() {
+        return quantidade;
     }
 
-    public void setValorTotalLista(double valorTotalLista) {
-        this.valorTotalLista = valorTotalLista;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
-    public List<ItemListaCompra> getItem(ItemListaCompra item2) {
-        return item;
+    public double getValorUnitario() {
+        return valorUnitario;
     }
 
-    public void setItem(List<ItemListaCompra> item) {
-        this.item = item;
+    public void setValorUnitario(double valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+
+    public String getNomeProduto() {
+        return nomeProduto;
+    }
+
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
 }
