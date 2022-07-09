@@ -33,12 +33,11 @@ public class Produto {
     @JsonIgnoreProperties("produto")
     private Marca marca;
 
-    public Produto(Long id, String nome, String descricao, double valorProduto, Marca marca) {
+    public Produto(Long id, String nome, String descricao, double valorProduto) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.valorProduto = valorProduto;
-        this.marca = marca;
     }
 
     public Produto(){}

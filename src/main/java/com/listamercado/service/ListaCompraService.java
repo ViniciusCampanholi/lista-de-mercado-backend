@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.listamercado.model.ItemListaCompra;
+import com.listamercado.model.ItemCompra;
 import com.listamercado.model.ListaCompra;
 import com.listamercado.model.Produto;
 import com.listamercado.repository.ItemCompraRepository;
@@ -25,28 +25,68 @@ public class ListaCompraService {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    ItemCompra item = new ItemCompra();
     
-    public ResponseEntity<ListaCompra> adicionarNaLista(Long idProduto, Long idLista){
-        
-        System.out.println("Print ln aqui: "+ idProduto + " " + idLista);
-        Optional<Produto> produtoBuscado = produtoRepository.findById(idProduto);
-        Produto produto = produtoBuscado.get();
+    public ResponseEntity<ListaCompra> adicionarNaLista(Long idProduto, Long idLista, ItemCompra item){
 
-        Optional<ListaCompra> listaCompraBuscada = listaCompraRepository.findById(idLista);
-        ListaCompra lista = listaCompraBuscada.get();
+        Optional<Produto> produtoBusca = produtoRepository.findById(idProduto);
+        Produto produto = produtoBusca.get();
 
-        ItemListaCompra item = new ItemListaCompra();
-        item.setListaCompra(lista);
+        Optional<ListaCompra> listaCompraBusca = listaCompraRepository.findById(idLista);
+        ListaCompra listaCompra = listaCompraBusca.get();
+
+        item.setListaCompra(listaCompra);
+        item.setId_produto(produto.getId());
         item.setNomeProduto(produto.getNome());
         item.setMarca(produto.getMarca().getNome());
         item.setValorUnitario(produto.getValorProduto());
         item.setValorTotal(produto.getValorProduto() * item.getQuantidade());
-        System.out.println("Print ln aqui: "+item.getListaCompra().getNomeLista());
         itemCompraRepository.save(item);
+        
+        listaCompra.setValorTotalLista(listaCompra.getValorTotalLista() + item.getValorTotal());
 
-        lista.getItem(item);
-        System.out.println("Print ln aqui: "+lista.getItem(item));
+        return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(listaCompra));
+    }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(lista));
+    public ResponseEntity<ListaCompra> adicionarNaLista2(Long idProduto, Long idLista, ItemCompra item){
+
+        Optional<Produto> produtoBusca = produtoRepository.findById(idProduto);
+        Produto produto = produtoBusca.get();
+
+        Optional<ListaCompra> listaCompraBusca = listaCompraRepository.findById(idLista);
+        ListaCompra listaCompra = listaCompraBusca.get();
+
+        item.setListaCompra(listaCompra);
+        item.setId_produto(produto.getId());
+        item.setNomeProduto(produto.getNome());
+        item.setMarca(produto.getMarca().getNome());
+        item.setValorUnitario(produto.getValorProduto());
+        item.setValorTotal(produto.getValorProduto() * item.getQuantidade());
+        itemCompraRepository.save(item);
+        
+        listaCompra.setValorTotalLista(listaCompra.getValorTotalLista() + item.getValorTotal());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(listaCompra));
+    }
+
+    public ResponseEntity<ListaCompra> removerProduto(Long idLista, Long idItem){
+
+        // Busca a lista pelo id
+        Optional<ListaCompra> listaCompraBusca = listaCompraRepository.findById(idLista);
+        ListaCompra listaCompra = listaCompraBusca.get();
+
+        // Busca o item pelo id
+        Optional<ItemCompra> itemCompraBusca = itemCompraRepository.findById(idItem);
+        ItemCompra item = itemCompraBusca.get();
+
+        // Efetua a subtração do valor total da lista pelo valor total do item
+        listaCompra.setValorTotalLista(listaCompra.getValorTotalLista() - item.getValorTotal());
+
+        // Deleta o item da lista
+        itemCompraRepository.deleteById(idItem);
+
+        // Atualiza a lista no DB
+        return ResponseEntity.ok(listaCompraRepository.save(listaCompra));
     }
 }

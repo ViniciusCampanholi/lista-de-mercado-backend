@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "listaCompra")
+@Table(name = "tb_listaCompra")
 public class ListaCompra {
 
     @Id
@@ -28,16 +28,15 @@ public class ListaCompra {
 
     @OneToMany(mappedBy = "listaCompra")
     @JsonIgnoreProperties("listaCompra")
-    private List<ItemListaCompra> item;
+    private List<ItemCompra> item;
     
-    public ListaCompra() {
-    }
-
-    public ListaCompra(Long id, String nomeLista, double valorTotalLista, List<ItemListaCompra> item) {
+    public ListaCompra(Long id, String nomeLista, double valorTotalLista) {
         this.id = id;
         this.nomeLista = nomeLista;
         this.valorTotalLista = valorTotalLista;
-        this.item = item;
+    }
+
+    public ListaCompra() {
     }
 
     public Long getId() {
@@ -64,11 +63,11 @@ public class ListaCompra {
         this.valorTotalLista = valorTotalLista;
     }
 
-    public List<ItemListaCompra> getItem(ItemListaCompra item2) {
+    public List<ItemCompra> getItem() {
         return item;
     }
 
-    public void setItem(List<ItemListaCompra> item) {
+    public void setItem(List<ItemCompra> item) {
         this.item = item;
     }
 
