@@ -27,8 +27,8 @@ public class ItemCompraController {
     private ItemCompraRepository itemCompraRepository;
 
     @GetMapping
-    public List<ItemCompra> getAll() {
-        return itemCompraRepository.findAll();
+    public ResponseEntity<List<ItemCompra>> getAll() {
+        return ResponseEntity.ok(itemCompraRepository.findAll());
     }
 
     @PutMapping("/atualizar")

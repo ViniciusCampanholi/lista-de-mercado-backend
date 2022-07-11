@@ -31,8 +31,8 @@ public class ListaCompraController {
     private ListaCompraService listaCompraService;
 
     @GetMapping
-    public List<ListaDeCompra> getAll() {
-        return listaCompraRepository.findAll();
+    public ResponseEntity<List<ListaDeCompra>> getAll() {
+        return ResponseEntity.ok(listaCompraRepository.findAll());
     }
 
     @GetMapping("/{id}")

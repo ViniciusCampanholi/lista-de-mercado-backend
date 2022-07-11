@@ -27,9 +27,8 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @GetMapping
-    public List<Produto> getAll(){
-        List<Produto> listaProdutos = produtoRepository.findAll();
-        return listaProdutos;
+    public ResponseEntity <List<Produto>> getAll(){
+        return ResponseEntity.ok(produtoRepository.findAll());
     }
 
     @GetMapping("/{id}")

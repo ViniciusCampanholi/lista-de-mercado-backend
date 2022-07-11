@@ -3,6 +3,7 @@ package com.listamercado.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,8 @@ public class MarcaController {
     private MarcaRepository marcaRepository;
 
     @GetMapping
-    public List<Marca> getAll() {
-        List<Marca> listaMarcas = marcaRepository.findAll();
-        return listaMarcas;
+    public ResponseEntity<List<Marca>> getAll() {
+        return ResponseEntity.ok(marcaRepository.findAll());
     }
 
     @GetMapping(value = "/{id}")
