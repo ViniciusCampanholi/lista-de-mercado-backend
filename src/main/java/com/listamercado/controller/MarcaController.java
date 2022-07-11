@@ -24,33 +24,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MarcaController {
 
     @Autowired
-    private MarcaRepository marcasRepository;
+    private MarcaRepository marcaRepository;
 
     @GetMapping
     public List<Marca> getAll() {
-        List<Marca> listaMarcas = marcasRepository.findAll();
+        List<Marca> listaMarcas = marcaRepository.findAll();
         return listaMarcas;
     }
 
     @GetMapping(value = "/{id}")
     public Optional<Marca> getById(@PathVariable Long id) {
-        Optional<Marca> marcaById = marcasRepository.findById(id);
+        Optional<Marca> marcaById = marcaRepository.findById(id);
         return marcaById;
     }
 
     @PostMapping(value = "/cadastrar")
-    public ResponseEntity<Marca> post(@RequestBody Marca marca) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(marcasRepository.save(marca));
+    public ResponseEntity<Marca> create(@RequestBody Marca marca) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(marcaRepository.save(marca));
     }
 
     @PostMapping(value = "/atualizar")
-    public ResponseEntity<Marca> put(@RequestBody Marca marca) {
-        return ResponseEntity.ok(marcasRepository.save(marca));
+    public ResponseEntity<Marca> update(@RequestBody Marca marca) {
+        return ResponseEntity.ok(marcaRepository.save(marca));
     }
 
     @DeleteMapping(value = "/deletar/{id}")
     public void delete(@PathVariable Long id) {
-        marcasRepository.deleteById(id);
+        marcaRepository.deleteById(id);
     }
 
 }

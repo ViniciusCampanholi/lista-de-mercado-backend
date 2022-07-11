@@ -40,12 +40,12 @@ public class ProdutoController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Produto> post(@RequestBody Produto produto){
+    public ResponseEntity<Produto> create(@RequestBody Produto produto){
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));
     }
 
     @PutMapping("/atualizar")
-    public ResponseEntity<Produto> put(@RequestBody Produto produto){
+    public ResponseEntity<Produto> update(@RequestBody Produto produto){
         return ResponseEntity.ok(produtoRepository.save(produto));
     }
 

@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,23 +26,29 @@ public class Produto {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name = "valor")
-    private double valorProduto;
+    @Column(name = "preco")
+    private double preco;
 
     @ManyToOne
     @JoinColumn(name = "marca_id", nullable = true)
-    @JsonIgnoreProperties("produto")
+    @JsonIgnoreProperties(value = "produto")
     private Marca marca;
 
-    public Produto(Long id, String nome, String descricao, double valorProduto, Marca marca) {
+    @OneToOne
+    @JsonIgnoreProperties(value = "produto")
+    private ItemCompra itemCompra;
+
+    public Produto(Long id, String nome, String descricao, double preco, Marca marca, ItemCompra itemCompra) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.valorProduto = valorProduto;
+        this.preco = preco;
         this.marca = marca;
+        this.itemCompra = itemCompra;
     }
 
-    public Produto(){}
+    public Produto() {
+    }
 
     public Long getId() {
         return id;
@@ -67,6 +74,14 @@ public class Produto {
         this.descricao = descricao;
     }
 
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
     public Marca getMarca() {
         return marca;
     }
@@ -75,12 +90,13 @@ public class Produto {
         this.marca = marca;
     }
 
-    public double getValorProduto() {
-        return valorProduto;
+    public ItemCompra getItemCompra() {
+        return itemCompra;
     }
 
-    public void setValorProduto(double valorProduto) {
-        this.valorProduto = valorProduto;
+    public void setItemCompra(ItemCompra itemCompra) {
+        this.itemCompra = itemCompra;
     }
 
+    
 }
