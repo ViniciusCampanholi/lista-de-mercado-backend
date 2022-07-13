@@ -33,29 +33,42 @@ public class ListaCompraService {
         ListaDeCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
         List<ItemCompra> listaItems = listaCompra.getItemCompra();
 
+        // Verifica se a lista listaItems está vazia, se estiver, adicionar um novo produto
         if (listaItems.isEmpty()) {
-            adicionarProdutoNovo(produto, listaCompra, quantidade);
+            produtoNovo(produto, listaCompra, quantidade);
         } else {
+            // controla item repetido dentro da lista
             boolean controleItemRepetido = false;
+            // Instancia a classe
             ItemCompra itemCompraRepetido = new ItemCompra();
+            // verifica item a item dentro da lista de itens
             for (ItemCompra item : listaItems) {
+                //  verifica se algum idProduto dento dos itens é igual ao idProduto vindo da requisição
+                // Se sim, então a variavel de controle recebe true, e o item repetido é armazenado no itemCompraRepetido
                 if (idProduto == item.getIdProduto()) {
                     controleItemRepetido = true;
                     itemCompraRepetido = item;
                 }
             }
+            // Se a variavel controleItemRepetido for true, ou seja se houver item repetido
+            // o método adicionarProdutoExistente é chamado
             if (controleItemRepetido == true) {
-                adicionarProdutoExistente(itemCompraRepetido, quantidade);
-            } else {
-                adicionarProdutoNovo(produto, listaCompra, quantidade);
+                produtoExistente(itemCompraRepetido, quantidade);
+            } 
+            // Se não houver item repetido, levando em conta o valor de controleItemRepetido, o método adicionarProdutoNovo é chamado
+            else {
+                produtoNovo(produto, listaCompra, quantidade);
             }
+            // Ao final, a variável controleItemRepetido tem seu valor false atribuído
             controleItemRepetido = false;
         }
+        // chamada do método para atualizar a lista
         atualizarQuantidadeEvalorTotal(idLista);
         return ResponseEntity.status(HttpStatus.OK).body(listaDeCompraRepository.save(listaCompra));
     }
 
-    public void adicionarProdutoNovo(Produto produto, ListaDeCompra listaCompra, double quantidade) {
+    // Método para adicionar um produto novo a lista de compras do usuário
+    public void produtoNovo(Produto produto, ListaDeCompra listaCompra, double quantidade) {
         ItemCompra item = new ItemCompra();
         item.setIdProduto(produto.getId());
         item.setNomeProduto(produto.getNome());
@@ -68,7 +81,8 @@ public class ListaCompraService {
         listaDeCompraRepository.save(listaCompra);
     }
 
-    public void adicionarProdutoExistente(ItemCompra itemRepetido, double quantidade) {
+    // Método para adicionar um produto que já existe na lista de compras do usuário
+    public void produtoExistente(ItemCompra itemRepetido, double quantidade) {
         itemRepetido.setQuantidade(itemRepetido.getQuantidade() + quantidade);
         itemRepetido.setValorTotal(itemRepetido.getValorUnitario() * itemRepetido.getQuantidade());
         itemCompraRepository.save(itemRepetido);
@@ -89,7 +103,6 @@ public class ListaCompraService {
                 listaDeCompra.get().setValorTotal(valorTotal);
             }
         }
-
         listaDeCompraRepository.save(listaDeCompra.get());
     }
 
