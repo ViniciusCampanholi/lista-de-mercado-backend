@@ -35,14 +35,16 @@ public class ListaCompraController {
         return ResponseEntity.ok(listaCompraRepository.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/lista/{id}")
     public ResponseEntity<ListaDeCompra> getById(@PathVariable Long id) {
+        listaCompraService.atualizarQuantidadeEvalorTotal(id);
+
         return listaCompraRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<ListaDeCompra> create(@RequestBody ListaDeCompra lista) {
+    public ResponseEntity<ListaDeCompra> createLista(@RequestBody ListaDeCompra lista) {
         return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(lista));
     }
 
@@ -52,18 +54,23 @@ public class ListaCompraController {
         return listaCompraService.adicionarNaLista(idProduto, idLista, quantidade);
     }
 
-    @PutMapping("/atualizar/lista/{id}")
-    public ResponseEntity<ListaDeCompra> update(@PathVariable ListaDeCompra listaDeCompra){
+    @PutMapping("/atualizar/lista")
+    public ResponseEntity<ListaDeCompra> updateLista(@RequestBody ListaDeCompra listaDeCompra){
         return ResponseEntity.ok(listaCompraRepository.save(listaDeCompra));
     }
 
     @DeleteMapping("/deletar/lista/{id}")
-    public void delete(@PathVariable Long id) {
+    public void deleteLista(@PathVariable Long id) {
         listaCompraRepository.deleteById(id);
     }
 
-    @DeleteMapping("/remover/item/{idItem}/lista/{idLista}/")
+    @DeleteMapping("/remover/item/{idItem}/lista/{idLista}")
     public ResponseEntity<ListaDeCompra> remover( @PathVariable Long idLista, @PathVariable Long idItem) {
-        return listaCompraService.removerProduto(idLista, idItem);
+        return listaCompraService.removerItem(idLista, idItem);
+    }
+
+    @DeleteMapping("/limparlista/{idLista}")
+    public void limparLista(@PathVariable Long idLista) {
+        listaCompraService.limparListaDeCompra(idLista);
     }
 }

@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,8 +18,20 @@ public class ItemCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nomeProduto", nullable = false)
+    private String nomeProduto;
+
+    @Column(name = "idProduto", nullable = false)
+    private Long idProduto;
+
+    @Column(name = "marca", nullable = false)
+    private String marca;
+    
     @Column(name = "quantidade", nullable = false)
     private double quantidade;
+
+    @Column(name = "valorUnitario", nullable = false)
+    private double valorUnitario;
 
     @Column(name = "valorTotal", nullable = false)
     private double valorTotal;
@@ -29,20 +40,22 @@ public class ItemCompra {
     @JsonIgnoreProperties(value = "itemCompra")
     private ListaDeCompra listaDeCompra;
 
-    @OneToOne 
-    @JsonIgnoreProperties(value = "itemcompra")
-    private Produto produto;
-
     public ItemCompra() {
     }
 
-    public ItemCompra(Long id, double quantidade, double valorTotal, ListaDeCompra listaDeCompra, Produto produto) {
+    public ItemCompra(Long id, String nomeProduto, String marca, double quantidade, double valorUnitario,
+            double valorTotal, ListaDeCompra listaDeCompra, Long idProduto) {
         this.id = id;
+        this.nomeProduto = nomeProduto;
+        this.marca = marca;
         this.quantidade = quantidade;
+        this.valorUnitario = valorUnitario;
         this.valorTotal = valorTotal;
         this.listaDeCompra = listaDeCompra;
-        this.produto = produto;
+        this.idProduto = idProduto;
     }
+
+
 
     public Long getId() {
         return id;
@@ -76,13 +89,36 @@ public class ItemCompra {
         this.listaDeCompra = listaDeCompra;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public double getValorUnitario() {
+        return valorUnitario;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setValorUnitario(double valorUnitario) {
+        this.valorUnitario = valorUnitario;
     }
 
-    
+    public String getNomeProduto() {
+        return nomeProduto;
+    }
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public Long getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
+    }
+
 }

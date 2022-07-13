@@ -9,11 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_produtos")
+@Table(name = "tb_produto")
 public class Produto {
     
     @Id
@@ -34,17 +33,12 @@ public class Produto {
     @JsonIgnoreProperties(value = "produto")
     private Marca marca;
 
-    @OneToOne
-    @JsonIgnoreProperties(value = "produto")
-    private ItemCompra itemCompra;
-
-    public Produto(Long id, String nome, String descricao, double preco, Marca marca, ItemCompra itemCompra) {
+    public Produto(Long id, String nome, String descricao, double preco, Marca marca) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.marca = marca;
-        this.itemCompra = itemCompra;
     }
 
     public Produto() {
@@ -89,14 +83,4 @@ public class Produto {
     public void setMarca(Marca marca) {
         this.marca = marca;
     }
-
-    public ItemCompra getItemCompra() {
-        return itemCompra;
-    }
-
-    public void setItemCompra(ItemCompra itemCompra) {
-        this.itemCompra = itemCompra;
-    }
-
-    
 }

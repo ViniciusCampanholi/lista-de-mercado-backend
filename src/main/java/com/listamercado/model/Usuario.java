@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "tb_usuario")
 public class Usuario {
     
     @Id
@@ -44,7 +44,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = "usuario")
-    List<ListaDeCompra> listaDeCompra;
+    private List<ListaDeCompra> listaDeCompra;
 
     public Usuario(Long id, String nome, String foto, @Size(max = 8) String userName, @Size(min = 8) String senha,
             Date dataCriacao, List<ListaDeCompra> listaDeCompra) {
