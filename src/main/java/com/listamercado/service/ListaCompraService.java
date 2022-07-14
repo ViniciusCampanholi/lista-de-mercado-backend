@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.listamercado.model.ItemCompra;
-import com.listamercado.model.ListaDeCompra;
+import com.listamercado.model.ListaCompra;
 import com.listamercado.model.Produto;
 import com.listamercado.repository.ItemCompraRepository;
 import com.listamercado.repository.ListaDeCompraRepository;
@@ -27,13 +27,14 @@ public class ListaCompraService {
     @Autowired
     private ItemCompraRepository itemCompraRepository;
 
-    public ResponseEntity<ListaDeCompra> adicionarNaLista(Long idProduto, Long idLista, double quantidade) {
+    public ResponseEntity<ListaCompra> adicionarNaLista(Long idProduto, Long idLista, double quantidade) {
 
         Produto produto = produtoRepository.findById(idProduto).get();
-        ListaDeCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
+        ListaCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
         List<ItemCompra> listaItems = listaCompra.getItemCompra();
 
-        // Verifica se a lista listaItems está vazia, se estiver, adicionar um novo produto
+        // Verifica se a lista listaItems está vazia, se estiver, adicionar um novo
+        // produto
         if (listaItems.isEmpty()) {
             produtoNovo(produto, listaCompra, quantidade);
         } else {
@@ -43,8 +44,10 @@ public class ListaCompraService {
             ItemCompra itemCompraRepetido = new ItemCompra();
             // verifica item a item dentro da lista de itens
             for (ItemCompra item : listaItems) {
-                //  verifica se algum idProduto dento dos itens é igual ao idProduto vindo da requisição
-                // Se sim, então a variavel de controle recebe true, e o item repetido é armazenado no itemCompraRepetido
+                // verifica se algum idProduto dento dos itens é igual ao idProduto vindo da
+                // requisição
+                // Se sim, então a variavel de controle recebe true, e o item repetido é
+                // armazenado no itemCompraRepetido
                 if (idProduto == item.getIdProduto()) {
                     controleItemRepetido = true;
                     itemCompraRepetido = item;
@@ -54,8 +57,9 @@ public class ListaCompraService {
             // o método adicionarProdutoExistente é chamado
             if (controleItemRepetido == true) {
                 produtoExistente(itemCompraRepetido, quantidade);
-            } 
-            // Se não houver item repetido, levando em conta o valor de controleItemRepetido, o método adicionarProdutoNovo é chamado
+            }
+            // Se não houver item repetido, levando em conta o valor de
+            // controleItemRepetido, o método adicionarProdutoNovo é chamado
             else {
                 produtoNovo(produto, listaCompra, quantidade);
             }
@@ -68,7 +72,7 @@ public class ListaCompraService {
     }
 
     // Método para adicionar um produto novo a lista de compras do usuário
-    public void produtoNovo(Produto produto, ListaDeCompra listaCompra, double quantidade) {
+    public void produtoNovo(Produto produto, ListaCompra listaCompra, double quantidade) {
         ItemCompra item = new ItemCompra();
         item.setIdProduto(produto.getId());
         item.setNomeProduto(produto.getNome());
@@ -88,41 +92,39 @@ public class ListaCompraService {
         itemCompraRepository.save(itemRepetido);
     }
 
+    // Método para atualizar valores da lista de compras do usuário
     public void atualizarQuantidadeEvalorTotal(Long idLista) {
-        Optional<ListaDeCompra> listaDeCompra = listaDeCompraRepository.findById(idLista);
-
-        listaDeCompra.get().setQuantidadeDeItens(listaDeCompra.get().getItemCompra().size());
-
+        // Armazena uma lista de compras buscada pelo idLista passado na requisição
+        ListaCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
+        // A quantidade de itens dentro da lista é o comprimento do array itensCompra
+        // dentro da lista
+        listaCompra.setQuantidadeDeItens(listaCompra.getItemCompra().size());
+        // valor padrão da variavel valorTotal
         double valorTotal = 0;
-        if (listaDeCompra.get().getItemCompra().isEmpty()) {
-            listaDeCompra.get().setValorTotal(0);
-            listaDeCompra.get().setQuantidadeDeItens(0);
+        // Se a lista estiver vazia, então a quantidade de itens e o valor total serão
+        // iguais a 0
+        if (listaCompra.getItemCompra().isEmpty()) {
+            listaCompra.setValorTotal(0);
+            listaCompra.setQuantidadeDeItens(0);
+            // se a lista não estiver vazia, então o for irá somar valor
         } else {
-            for (ItemCompra itemCompra : listaDeCompra.get().getItemCompra()) {
+            for (ItemCompra itemCompra : listaCompra.getItemCompra()) {
                 valorTotal = valorTotal + itemCompra.getValorTotal();
-                listaDeCompra.get().setValorTotal(valorTotal);
+                listaCompra.setValorTotal(valorTotal);
             }
         }
-        listaDeCompraRepository.save(listaDeCompra.get());
+        listaDeCompraRepository.save(listaCompra);
     }
 
-    public ResponseEntity<ListaDeCompra> removerItem(Long idLista, Long idItem) {
-        Optional<ListaDeCompra> listaCompraBusca = listaDeCompraRepository.findById(idLista);
-        ListaDeCompra listaCompra = listaCompraBusca.get();
-        if (listaDeCompraRepository.findById(listaCompra.getId()).isPresent()) {
-            Optional<ItemCompra> itemCompraBusca = itemCompraRepository.findById(idItem);
-            ItemCompra item = itemCompraBusca.get();
-            if (itemCompraRepository.findById(item.getId()).isPresent()) {
-                itemCompraRepository.deleteById(idItem);
-            }
-        }
-
-        this.atualizarQuantidadeEvalorTotal(idLista);
-        return ResponseEntity.ok(listaDeCompraRepository.save(listaCompra));
+    // Método para deletar o item inteiro da lista atraves do id
+    public void deletarItem(Long idLista, Long idItem) {
+        itemCompraRepository.deleteById(idItem);
+        atualizarQuantidadeEvalorTotal(idLista);
     }
 
-    public ResponseEntity<ListaDeCompra> limparListaDeCompra(Long idLista) {
-        Optional<ListaDeCompra> listaDeCompra = listaDeCompraRepository.findById(idLista);
+    // Método para limpar a lista, deleta todos os itens da lista mas não exclui a lista
+    public ResponseEntity<ListaCompra> limparLista(Long idLista) {
+        Optional<ListaCompra> listaDeCompra = listaDeCompraRepository.findById(idLista);
         List<ItemCompra> listaItemCompra = listaDeCompra.get().getItemCompra();
         if (!listaItemCompra.isEmpty()) {
             itemCompraRepository.deleteAll(listaItemCompra);

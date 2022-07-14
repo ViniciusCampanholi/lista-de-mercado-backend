@@ -44,10 +44,10 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = "usuario")
-    private List<ListaDeCompra> listaDeCompra;
+    private List<ListaCompra> listaDeCompra;
 
     public Usuario(Long id, String nome, String foto, @Size(max = 8) String userName, @Size(min = 8) String senha,
-            Date dataCriacao, List<ListaDeCompra> listaDeCompra) {
+            Date dataCriacao, List<ListaCompra> listaDeCompra) {
         this.id = id;
         this.nome = nome;
         this.foto = foto;
@@ -108,11 +108,11 @@ public class Usuario {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<ListaDeCompra> getListaDeCompra() {
+    public List<ListaCompra> getListaDeCompra() {
         return listaDeCompra;
     }
 
-    public void setListaDeCompra(List<ListaDeCompra> listaDeCompra) {
+    public void setListaDeCompra(List<ListaCompra> listaDeCompra) {
         this.listaDeCompra = listaDeCompra;
     }
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.listamercado.model.ListaDeCompra;
+import com.listamercado.model.ListaCompra;
 import com.listamercado.repository.ListaDeCompraRepository;
 import com.listamercado.service.ListaCompraService;
 
@@ -31,31 +31,30 @@ public class ListaCompraController {
     private ListaCompraService listaCompraService;
 
     @GetMapping
-    public ResponseEntity<List<ListaDeCompra>> getAll() {
+    public ResponseEntity<List<ListaCompra>> getAll() {
         return ResponseEntity.ok(listaCompraRepository.findAll());
     }
 
     @GetMapping("/lista/{id}")
-    public ResponseEntity<ListaDeCompra> getById(@PathVariable Long id) {
+    public ResponseEntity<ListaCompra> getById(@PathVariable Long id) {
         listaCompraService.atualizarQuantidadeEvalorTotal(id);
-
         return listaCompraRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<ListaDeCompra> createLista(@RequestBody ListaDeCompra lista) {
+    public ResponseEntity<ListaCompra> createLista(@RequestBody ListaCompra lista) {
         return ResponseEntity.status(HttpStatus.CREATED).body(listaCompraRepository.save(lista));
     }
 
     @PostMapping("/adicionar/produto/{idProduto}/lista/{idLista}/quantidade/{quantidade}")
-    public ResponseEntity<ListaDeCompra> addProduto(@PathVariable Long idProduto, @PathVariable Long idLista,
+    public ResponseEntity<ListaCompra> addProduto(@PathVariable Long idProduto, @PathVariable Long idLista,
             @PathVariable double quantidade) {
         return listaCompraService.adicionarNaLista(idProduto, idLista, quantidade);
     }
 
     @PutMapping("/atualizar/lista")
-    public ResponseEntity<ListaDeCompra> updateLista(@RequestBody ListaDeCompra listaDeCompra){
+    public ResponseEntity<ListaCompra> updateLista(@RequestBody ListaCompra listaDeCompra){
         return ResponseEntity.ok(listaCompraRepository.save(listaDeCompra));
     }
 
@@ -65,12 +64,12 @@ public class ListaCompraController {
     }
 
     @DeleteMapping("/remover/item/{idItem}/lista/{idLista}")
-    public ResponseEntity<ListaDeCompra> remover( @PathVariable Long idLista, @PathVariable Long idItem) {
-        return listaCompraService.removerItem(idLista, idItem);
+    public void deleteItem(@PathVariable Long idLista, @PathVariable Long idItem) {
+        listaCompraService.deletarItem(idLista, idItem);
     }
 
     @DeleteMapping("/limparlista/{idLista}")
-    public void limparLista(@PathVariable Long idLista) {
-        listaCompraService.limparListaDeCompra(idLista);
+    public void limpar(@PathVariable Long idLista) {
+        listaCompraService.limparLista(idLista);
     }
 }
