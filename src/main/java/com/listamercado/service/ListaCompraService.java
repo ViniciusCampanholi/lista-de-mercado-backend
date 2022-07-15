@@ -102,16 +102,24 @@ public class ListaCompraService {
         listaCompra.setQuantidadeDeItens(listaCompra.getItemCompra().size());
         // valor padrão da variavel valorTotal
         double valorTotal = 0;
+        double valorTotalCarrinho = 0;
         // Se a lista estiver vazia, então a quantidade de itens e o valor total serão
         // iguais a 0
         if (listaCompra.getItemCompra().isEmpty()) {
             listaCompra.setValorTotal(0);
+            listaCompra.setValorTotalCarrinho(0);
             listaCompra.setQuantidadeDeItens(0);
             // se a lista não estiver vazia, então o for irá somar valor
         } else {
             for (ItemCompra itemCompra : listaCompra.getItemCompra()) {
-                valorTotal = valorTotal + itemCompra.getValorTotal();
+                if (itemCompra.getStatus() == false) {
+                    valorTotal = valorTotal + itemCompra.getValorTotal();
+                } else if(itemCompra.getStatus() == true){
+                    valorTotalCarrinho = valorTotalCarrinho + itemCompra.getValorTotal();
+                }
                 listaCompra.setValorTotal(valorTotal);
+                listaCompra.setValorTotalCarrinho(valorTotalCarrinho);
+
             }
         }
         listaDeCompraRepository.save(listaCompra);
@@ -123,7 +131,8 @@ public class ListaCompraService {
         atualizarQuantidadeEvalorTotal(idLista);
     }
 
-    // Método para limpar a lista, deleta todos os itens da lista mas não exclui a lista
+    // Método para limpar a lista, deleta todos os itens da lista mas não exclui a
+    // lista
     public ResponseEntity<ListaCompra> limparLista(Long idLista) {
         Optional<ListaCompra> listaDeCompra = listaDeCompraRepository.findById(idLista);
         List<ItemCompra> listaItemCompra = listaDeCompra.get().getItemCompra();
