@@ -13,7 +13,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -42,19 +41,14 @@ public class ListaCompra {
     @JsonIgnoreProperties(value = "listaCompra")
     private List<ItemCompra> itemCompra;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "listaDeCompra")
-    private Usuario usuario;
-
     public ListaCompra(Long id, String nome, double valorTotal, int quantidadeDeItens, Date dataCriacao,
-            List<ItemCompra> itemCompra, Usuario usuario) {
+            List<ItemCompra> itemCompra) {
         this.id = id;
         this.nome = nome;
         this.valorTotal = valorTotal;
         this.quantidadeDeItens = quantidadeDeItens;
         this.dataCriacao = dataCriacao;
         this.itemCompra = itemCompra;
-        this.usuario = usuario;
     }
 
     public ListaCompra() {
@@ -106,16 +100,6 @@ public class ListaCompra {
 
     public void setItemCompra(List<ItemCompra> itemCompra) {
         this.itemCompra = itemCompra;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-    
-    
+    } 
 
 }

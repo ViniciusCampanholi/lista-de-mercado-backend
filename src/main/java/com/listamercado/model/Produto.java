@@ -1,7 +1,5 @@
 package com.listamercado.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -11,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,11 +33,7 @@ public class Produto {
     @JsonIgnoreProperties(value = "produto")
     private Marca marca;
 
-    @OneToMany(mappedBy = "produto")
-    @JsonIgnoreProperties(value = "produto")
-    private List<HistoricoPrecoProduto> historicoPrecoProduto;
-
-    public Produto(Long id, String nome, String descricao, double preco, Marca marca, HistoricoPrecoProduto historicoPrecoProduto) {
+    public Produto(Long id, String nome, String descricao, double preco, Marca marca) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -90,14 +83,5 @@ public class Produto {
     public void setMarca(Marca marca) {
         this.marca = marca;
     }
-
-    public List<HistoricoPrecoProduto> getHistoricoPrecoProduto() {
-        return historicoPrecoProduto;
-    }
-
-    public void setHistoricoPrecoProduto(List<HistoricoPrecoProduto> historicoPrecoProduto) {
-        this.historicoPrecoProduto = historicoPrecoProduto;
-    }
-
-    
+   
 }
