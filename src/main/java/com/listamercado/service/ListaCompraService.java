@@ -80,7 +80,8 @@ public class ListaCompraService {
         item.setQuantidade(quantidade);
         item.setValorUnitario(produto.getPreco());
         item.setValorTotal(produto.getPreco() * quantidade);
-        item.setListaDeCompra(listaCompra);
+        item.setStatus(false);
+        item.setListaCompra(listaCompra);
         itemCompraRepository.save(item);
         listaDeCompraRepository.save(listaCompra);
     }

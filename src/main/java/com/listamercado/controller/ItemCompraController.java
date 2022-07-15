@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.listamercado.model.ItemCompra;
 import com.listamercado.repository.ItemCompraRepository;
+import com.listamercado.service.ItemCompraService;
 
 
 
@@ -26,6 +27,9 @@ public class ItemCompraController {
     @Autowired
     private ItemCompraRepository itemCompraRepository;
 
+    @Autowired
+    private ItemCompraService itemCompraService;
+
     @GetMapping
     public ResponseEntity<List<ItemCompra>> getAll() {
         return ResponseEntity.ok(itemCompraRepository.findAll());
@@ -34,6 +38,11 @@ public class ItemCompraController {
     @PutMapping("/atualizar")
     public ResponseEntity<ItemCompra> update(@RequestBody ItemCompra itemCompra) {
         return ResponseEntity.ok(itemCompraRepository.save(itemCompra));
+    }
+
+    @PutMapping("/carrinho/{id}")
+    public ResponseEntity<ItemCompra> setStatus(@PathVariable Long id){
+        return itemCompraService.setStatusItem(id);
     }
 
     @DeleteMapping("/delete/{id}")

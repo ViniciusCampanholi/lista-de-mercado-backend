@@ -41,20 +41,20 @@ public class ItemCompra {
 
     @ManyToOne
     @JsonIgnoreProperties(value = "itemCompra")
-    private ListaCompra listaDeCompra;
+    private ListaCompra listaCompra;
 
     public ItemCompra() {
     }
 
     public ItemCompra(Long id, String nomeProduto, String marca, double quantidade, double valorUnitario,
-            double valorTotal, ListaCompra listaDeCompra, Long idProduto, boolean status) {
+            double valorTotal, ListaCompra listaCompra, Long idProduto, boolean status) {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.marca = marca;
         this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
         this.valorTotal = valorTotal;
-        this.listaDeCompra = listaDeCompra;
+        this.listaCompra = listaCompra;
         this.idProduto = idProduto;
         this.status = status;
     }
@@ -83,12 +83,12 @@ public class ItemCompra {
         this.valorTotal = valorTotal;
     }
 
-    public ListaCompra getListaDeCompra() {
-        return listaDeCompra;
+    public ListaCompra getListaCompra() {
+        return listaCompra;
     }
 
-    public void setListaDeCompra(ListaCompra listaDeCompra) {
-        this.listaDeCompra = listaDeCompra;
+    public void setListaCompra(ListaCompra listaCompra) {
+        this.listaCompra = listaCompra;
     }
 
     public double getValorUnitario() {
@@ -123,8 +123,13 @@ public class ItemCompra {
         this.idProduto = idProduto;
     }
 
-    public ItemCompra(boolean status) {
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
+    
 }
