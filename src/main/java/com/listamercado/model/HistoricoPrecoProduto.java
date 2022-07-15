@@ -30,7 +30,7 @@ public class HistoricoPrecoProduto {
     private Date dataReferencia;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id", nullable = false)
+    @JoinColumn(name = "produto_id")
     @JsonIgnoreProperties(value = "historicoProdutoProduto")
     private Produto produto;
 
