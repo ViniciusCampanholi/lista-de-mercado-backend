@@ -36,6 +36,9 @@ public class ItemCompra {
     @Column(name = "valorTotal", nullable = false)
     private double valorTotal;
 
+    @Column(name = "status", nullable = false)
+    private boolean status;
+
     @ManyToOne
     @JsonIgnoreProperties(value = "itemCompra")
     private ListaCompra listaDeCompra;
@@ -44,7 +47,7 @@ public class ItemCompra {
     }
 
     public ItemCompra(Long id, String nomeProduto, String marca, double quantidade, double valorUnitario,
-            double valorTotal, ListaCompra listaDeCompra, Long idProduto) {
+            double valorTotal, ListaCompra listaDeCompra, Long idProduto, boolean status) {
         this.id = id;
         this.nomeProduto = nomeProduto;
         this.marca = marca;
@@ -53,9 +56,8 @@ public class ItemCompra {
         this.valorTotal = valorTotal;
         this.listaDeCompra = listaDeCompra;
         this.idProduto = idProduto;
+        this.status = status;
     }
-
-
 
     public Long getId() {
         return id;
@@ -119,6 +121,10 @@ public class ItemCompra {
 
     public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
+    }
+
+    public ItemCompra(boolean status) {
+        this.status = status;
     }
 
 }

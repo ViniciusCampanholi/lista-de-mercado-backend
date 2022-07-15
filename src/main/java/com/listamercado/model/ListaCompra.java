@@ -37,11 +37,14 @@ public class ListaCompra {
     @Column(name = "dataCricao")
     private Date dataCriacao;
 
+    @Column(name = "status", nullable = false)
+    private boolean status;
+
     @OneToMany(mappedBy = "listaCompra", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties(value = "listaCompra")
     private List<ItemCompra> itemCompra;
 
-    public ListaCompra(Long id, String nome, double valorTotal, int quantidadeDeItens, Date dataCriacao,
+    public ListaCompra(Long id, String nome, double valorTotal, int quantidadeDeItens, Date dataCriacao, boolean status,
             List<ItemCompra> itemCompra) {
         this.id = id;
         this.nome = nome;
@@ -49,6 +52,9 @@ public class ListaCompra {
         this.quantidadeDeItens = quantidadeDeItens;
         this.dataCriacao = dataCriacao;
         this.itemCompra = itemCompra;
+        this.status = status;
+        this.itemCompra = itemCompra;
+        
     }
 
     public ListaCompra() {
@@ -100,6 +106,15 @@ public class ListaCompra {
 
     public void setItemCompra(List<ItemCompra> itemCompra) {
         this.itemCompra = itemCompra;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     } 
+    
 
 }

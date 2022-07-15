@@ -28,6 +28,7 @@ public class ListaCompraController {
     private ListaDeCompraRepository listaCompraRepository;
 
     @Autowired
+    
     private ListaCompraService listaCompraService;
 
     @GetMapping
