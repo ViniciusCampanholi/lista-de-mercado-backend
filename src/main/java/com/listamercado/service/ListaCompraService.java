@@ -12,14 +12,14 @@ import com.listamercado.model.ItemCompra;
 import com.listamercado.model.ListaCompra;
 import com.listamercado.model.Produto;
 import com.listamercado.repository.ItemCompraRepository;
-import com.listamercado.repository.ListaDeCompraRepository;
+import com.listamercado.repository.ListaCompraRepository;
 import com.listamercado.repository.ProdutoRepository;
 
 @Service
 public class ListaCompraService {
 
     @Autowired
-    private ListaDeCompraRepository listaDeCompraRepository;
+    private ListaCompraRepository listaCompraRepository;
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -30,7 +30,7 @@ public class ListaCompraService {
     public ResponseEntity<ListaCompra> adicionarNaLista(Long idProduto, Long idLista, double quantidade) {
 
         Produto produto = produtoRepository.findById(idProduto).get();
-        ListaCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
+        ListaCompra listaCompra = listaCompraRepository.findById(idLista).get();
         List<ItemCompra> listaItems = listaCompra.getItemCompra();
 
         // Verifica se a lista listaItems está vazia, se estiver, adicionar um novo
@@ -67,8 +67,8 @@ public class ListaCompraService {
             controleItemRepetido = false;
         }
         // chamada do método para atualizar a lista
-        atualizarQuantidadeEvalorTotal(idLista);
-        return ResponseEntity.status(HttpStatus.OK).body(listaDeCompraRepository.save(listaCompra));
+        atualizarListaCompra(idLista);
+        return ResponseEntity.status(HttpStatus.OK).body(listaCompraRepository.save(listaCompra));
     }
 
     // Método para adicionar um produto novo a lista de compras do usuário
@@ -83,7 +83,7 @@ public class ListaCompraService {
         item.setStatus(false);
         item.setListaCompra(listaCompra);
         itemCompraRepository.save(item);
-        listaDeCompraRepository.save(listaCompra);
+        listaCompraRepository.save(listaCompra);
     }
 
     // Método para adicionar um produto que já existe na lista de compras do usuário
@@ -94,17 +94,17 @@ public class ListaCompraService {
     }
 
     // Método para atualizar valores da lista de compras do usuário
-    public void atualizarQuantidadeEvalorTotal(Long idLista) {
+    public void atualizarListaCompra(Long idLista) {
         // Armazena uma lista de compras buscada pelo idLista passado na requisição
-        ListaCompra listaCompra = listaDeCompraRepository.findById(idLista).get();
+        ListaCompra listaCompra = listaCompraRepository.findById(idLista).get();
         // A quantidade de itens dentro da lista é o comprimento do array itensCompra
         // dentro da lista
         listaCompra.setQuantidadeDeItens(listaCompra.getItemCompra().size());
         // valor padrão da variavel valorTotal
         double valorTotal = 0;
         double valorTotalCarrinho = 0;
+        int contItensCarrinho = 0;
         // Se a lista estiver vazia, então a quantidade de itens e o valor total serão
-        // iguais a 0
         if (listaCompra.getItemCompra().isEmpty()) {
             listaCompra.setValorTotal(0);
             listaCompra.setValorTotalCarrinho(0);
@@ -113,34 +113,29 @@ public class ListaCompraService {
         } else {
             for (ItemCompra itemCompra : listaCompra.getItemCompra()) {
                 if (itemCompra.getStatus() == false) {
-                    valorTotal = valorTotal + itemCompra.getValorTotal();
-                } else if(itemCompra.getStatus() == true){
+                } else if (itemCompra.getStatus() == true) {
+                    contItensCarrinho = contItensCarrinho + 1;
                     valorTotalCarrinho = valorTotalCarrinho + itemCompra.getValorTotal();
                 }
+                listaCompra.setQuantidadeCarrinho(contItensCarrinho);
+                valorTotal = valorTotal + itemCompra.getValorTotal();
                 listaCompra.setValorTotal(valorTotal);
                 listaCompra.setValorTotalCarrinho(valorTotalCarrinho);
-
             }
         }
-        listaDeCompraRepository.save(listaCompra);
+        listaCompraRepository.save(listaCompra);
     }
 
     // Método para deletar o item inteiro da lista atraves do id
     public void deletarItem(Long idLista, Long idItem) {
         itemCompraRepository.deleteById(idItem);
-        atualizarQuantidadeEvalorTotal(idLista);
+        atualizarListaCompra(idLista);
     }
 
-    // Método para limpar a lista, deleta todos os itens da lista mas não exclui a
-    // lista
-    public ResponseEntity<ListaCompra> limparLista(Long idLista) {
-        Optional<ListaCompra> listaDeCompra = listaDeCompraRepository.findById(idLista);
-        List<ItemCompra> listaItemCompra = listaDeCompra.get().getItemCompra();
-        if (!listaItemCompra.isEmpty()) {
-            itemCompraRepository.deleteAll(listaItemCompra);
-            this.atualizarQuantidadeEvalorTotal(idLista);
-        }
-        return listaDeCompraRepository.findById(idLista).map(resp -> ResponseEntity.ok(resp))
-                .orElse(ResponseEntity.notFound().build());
+    // deleta todos os itens da lista mas não exclui a lista
+    public void limparLista(Long idLista) {
+        ListaCompra listaCompra = listaCompraRepository.findById(idLista).get();
+        itemCompraRepository.deleteAll(listaCompra.getItemCompra());
+        this.atualizarListaCompra(idLista);
     }
 }

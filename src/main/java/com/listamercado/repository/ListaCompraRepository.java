@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.listamercado.model.ListaCompra;
 
 @Repository
-public interface ListaDeCompraRepository extends JpaRepository<ListaCompra, Long>{
+public interface ListaCompraRepository extends JpaRepository<ListaCompra, Long>{
     
 }

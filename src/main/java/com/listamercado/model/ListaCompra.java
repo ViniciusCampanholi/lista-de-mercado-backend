@@ -36,6 +36,9 @@ public class ListaCompra {
     @Column(name = "quantidadeDeItens")
     private int quantidadeDeItens;
 
+    @Column(name = "quantidadeCarrinho")
+    private int quantidadeCarrinho;
+
     @UpdateTimestamp
     @Column(name = "dataCricao")
     private Date dataCriacao;
@@ -47,13 +50,14 @@ public class ListaCompra {
     @JsonIgnoreProperties(value = "listaCompra")
     private List<ItemCompra> itemCompra;
 
-    public ListaCompra(Long id, String nome, double valorTotal, double valorTotalCarrinho, int quantidadeDeItens, Date dataCriacao, boolean status,
+    public ListaCompra(Long id, String nome, double valorTotal, double valorTotalCarrinho, int quantidadeDeItens, int quantidadeCarrinho,Date dataCriacao, boolean status,
             List<ItemCompra> itemCompra) {
         this.id = id;
         this.nome = nome;
         this.valorTotal = valorTotal;
         this.valorTotalCarrinho = valorTotalCarrinho;
         this.quantidadeDeItens = quantidadeDeItens;
+        this.quantidadeCarrinho = quantidadeCarrinho;
         this.dataCriacao = dataCriacao;
         this.itemCompra = itemCompra;
         this.status = status;
@@ -126,6 +130,14 @@ public class ListaCompra {
 
     public void setValorTotalCarrinho(double valorTotalCarrinho) {
         this.valorTotalCarrinho = valorTotalCarrinho;
+    }
+
+    public int getQuantidadeCarrinho() {
+        return quantidadeCarrinho;
+    }
+
+    public void setQuantidadeCarrinho(int quantidadeCarrinho) {
+        this.quantidadeCarrinho = quantidadeCarrinho;
     } 
     
 

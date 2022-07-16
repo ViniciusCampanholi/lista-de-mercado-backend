@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.listamercado.model.ListaCompra;
-import com.listamercado.repository.ListaDeCompraRepository;
+import com.listamercado.repository.ListaCompraRepository;
 import com.listamercado.service.ListaCompraService;
 
 @RestController
@@ -25,7 +25,7 @@ import com.listamercado.service.ListaCompraService;
 public class ListaCompraController {
 
     @Autowired
-    private ListaDeCompraRepository listaCompraRepository;
+    private ListaCompraRepository listaCompraRepository;
 
     @Autowired
     
@@ -38,7 +38,7 @@ public class ListaCompraController {
 
     @GetMapping("/lista/{id}")
     public ResponseEntity<ListaCompra> getById(@PathVariable Long id) {
-        listaCompraService.atualizarQuantidadeEvalorTotal(id);
+        listaCompraService.atualizarListaCompra(id);
         return listaCompraRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
                 .orElse(ResponseEntity.notFound().build());
     }
