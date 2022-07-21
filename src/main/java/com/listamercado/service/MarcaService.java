@@ -7,8 +7,8 @@ import com.listamercado.repository.MarcaRepository;
 
 @Service
 public class MarcaService {
-    @Autowired
-    private MarcaRepository marcaRepository;
+    // @Autowired
+    // private MarcaRepository marcaRepository;
 
     
 }
